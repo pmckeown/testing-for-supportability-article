@@ -91,9 +91,6 @@ can also objectively test and measure your logs events.
 In unit and integration tests, use mocking tools like [Mockito](https://site.mockito.org/) to verify that your Logger is
 called the expected number of times with the necessary arguments. 
 
-<details>
-<summary>fdsf</summary>
-<p>
 ```java
 public class MetricsAnalyserTest {
 
@@ -121,10 +118,7 @@ public class MetricsAnalyserTest {
         verify(logger).warn(ERROR_TEMPLATE, CRITICAL, 100);
     }
 }
-/```
-</p>
-
-</details>
+```
 
 In integration tests, use an in-memory log appender to capture your logs and verify they contain the expected contents.
 
