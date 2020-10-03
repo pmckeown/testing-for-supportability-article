@@ -23,10 +23,12 @@ breaks, if the tester cannot tell easily from observing the application, then th
 
 ## Observability
 One of the most important aspects of an application is the ability to know what is going on inside the
-application at runtime.  In a cloud native world, [FIX] observability is harder as quite often ops teams logging into
-the server and inspecting the logs simply is not possible. Now logs are expected to be shipped automatically to a log
-aggregation system such as [Splunk](https://www.splunk.com/ "Splunk") or the 
-[ELK](https://www.elastic.co/what-is/elk-stack "ELK Stack") stack for indexing, visualisation, reporting and alerting.
+application at runtime.  In a cloud native world, observability is harder as quite often ops teams logging into
+the server and inspecting the logs simply is not possible.  In more traditional on-premise environments the
+developers who know most about the system usually don't have access to the servers to be able to view logs. Nowadays
+logs are expected to be shipped automatically to a log aggregation system such as 
+[Splunk](https://www.splunk.com/ "Splunk") or the [ELK](https://www.elastic.co/what-is/elk-stack "ELK Stack") stack
+for indexing, visualisation, reporting and alerting.
 
 With cloud-hosted systems, Sys Admins can't use low-level tools like `top` and `Task Manager` for understanding the
 resource usage of the servers running the applications.  Servers may not be accessible and you may be running
@@ -47,7 +49,7 @@ So, how do we know that we have built an observable system?  How do we know that
 production that we will be able to determine the issue to restore service in as short a time a possible?
 
 My advice is to try to break your systems in various ways and prove that when things do go wrong the tester is able
-to easily see why. [FIX] Exmaples here
+to easily see why. 
 
 ## Fixing Stuff (Quickly)
 To reduce the [Mean Time To Repair](https://en.wikipedia.org/wiki/Mean_time_to_repair), whomever is paged to react to
@@ -88,8 +90,8 @@ There are many good guides on good logging practices but if you start with the p
 As with everything else in software, you should test your logs.  This is often seen an a subjective activity but you
 can also objectively test and measure your logs events.
 
-In unit and integration tests, use mocking tools like [Mockito](https://site.mockito.org/) to verify that your Logger is
-called the expected number of times with the necessary arguments. 
+In unit tests, use mocking tools like [Mockito](https://site.mockito.org/) to verify that your Logger is called the
+expected number of times with the necessary arguments. 
 
 ```java
 public class MetricsAnalyserTest {
@@ -121,14 +123,18 @@ public class MetricsAnalyserTest {
 ```
 
 In integration tests, use an in-memory log appender to capture your logs and verify they contain the expected contents.
+Here is a [good example](https://www.baeldung.com/junit-asserting-logs).
 
 In functional/component tests, testing logging is harder as you system is deployed to a real environment and mocking or 
-capturing data is harder.  This is where the tester should be stressing the system And looking at is non-functional
-outputs to verify that they can see what when wrong.  Stress examples include:
+capturing data is harder.  This is where the tester should be stressing the system and looking at it's non-functional
+outputs to verify that they can see what when wrong.  
+
+Stress examples include:
 * Providing large data sets or disallowed character sets.
 * Providing invalid security credentials.
 * Make downstream systems unavailable to your application.
 * Change system integration configuration to make API calls timeout. 
+* Push enough load into the system for it to start failing.
 
 ### Test Your Monitoring
 The other critical component of your application's observability stack is the Application Performance Monitoring system
