@@ -121,7 +121,7 @@ across different systems and that logs are available to those that need it:
   troubleshooting and decreased to reduce noise.
   
 A good example of a log event taken from [timber.io](https://github.com/timberio/log-event-json-schema) is:
-```json
+```
 {
   "dt": "2016-12-01T02:23:12.236543Z",           // Consistent ISO8601 dates with nanosecond precision
   "level": "info",                               // The level of the log
