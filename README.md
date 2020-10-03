@@ -17,8 +17,6 @@
   * [Chaos Engineering](#chaos-engineering)
 - [Wrap Up](#wrap-up)
 
-
-
 ## Intro
 Operations are now becoming a key part of the life of a development team.  Development team members are often tasked
 with supporting the code that they deploy into the production environment, especially when those applications are
