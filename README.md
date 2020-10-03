@@ -170,9 +170,11 @@ There are other techniques to improve the overall supportability of your system 
 
 ### Game Days
 Game Days are the gamification of MTTR.  They can help your organisation to learn how to deal with multi-system failures
-and identify areas in your architecture where fragility and reduced supportability exists.  This can lead you
-to find low-hanging fruit to fix up cheaply to increase your overall resiliency and provide a better experience for
-your users.
+and identify areas in your architecture where fragility and reduced supportability exists.  
+
+This can lead you to find low-hanging fruit to fix up cheaply to increase your overall resiliency and provide a
+better experience for your users.  Or perhaps even find critical flaws in your architecture before they manifest in
+your production environment.
     
 ### Chaos Engineering
 Chaos Engineering is the automation of Game Days and running that in Production.  As such it is a riskier and more
