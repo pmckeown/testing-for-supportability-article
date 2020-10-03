@@ -23,7 +23,7 @@ breaks, if the tester cannot tell easily from observing the application, then th
 
 ## Observability
 One of the most important aspects of an application is the ability to know what is going on inside the
-application at runtime.  In a cloud native world, observability is harder as quite often ops teams logging into
+application at runtime.  In a cloud native world, [FIX] observability is harder as quite often ops teams logging into
 the server and inspecting the logs simply is not possible. Now logs are expected to be shipped automatically to a log
 aggregation system such as [Splunk](https://www.splunk.com/ "Splunk") or the 
 [ELK](https://www.elastic.co/what-is/elk-stack "ELK Stack") stack for indexing, visualisation, reporting and alerting.
@@ -47,11 +47,11 @@ So, how do we know that we have built an observable system?  How do we know that
 production that we will be able to determine the issue to restore service in as short a time a possible?
 
 My advice is to try to break your systems in various ways and prove that when things do go wrong the tester is able
-to easily see why. 
+to easily see why. [FIX] Exmaples here
 
 ## Fixing Stuff (Quickly)
-To reduce the [Mean Time To Repair](https://en.wikipedia.org/wiki/Mean_time_to_repair) whoever is paged to react to the
-incident needs to be able to find out the reason for the degradation or outage of service.
+To reduce the [Mean Time To Repair](https://en.wikipedia.org/wiki/Mean_time_to_repair), whomever is paged to react to
+the incident needs to be able to find out the reason for the degradation or outage of service and find out fast.
 
 If you have an APM system, they can easily tell you which downstream system is broken but your logs should also do
 that too.  APMs don't generally give you details of internal application logic failures.  They might show you a
@@ -60,13 +60,17 @@ show that (for example) the bearer tokens being presented are rejected due to ke
 latest public key has not been fetched.  They can also make it obvious that some business logic is failing due to
 data assumptions that are not true in the current environment.
 
-### Test Your Logging
-Writing good logs is a MUST in modern development practices.  Follow these guidelines to ensure that you have
-consistency across different systems and that logs are available to those that need it:
+Sometimes fixing things is a simple as "turning it off and on again" but sometimes it is much harder and visibility
+into what the system is doing is your most important tool.
+
+### Writing Good Logs
+Writing good logs is a MUST in modern development.  Follow these guidelines to ensure that you have consistency
+across different systems and that logs are available to those that need it:
 * Use a standard for your log messages in all systems. The Open Telemetry project from the CNCF is incubating an open
   logging standard.  Until then, find another or invent your own.    
-* Ensure that you log all exceptions (as they shouldn't be leaked out to consumers of you system via the UI or API)
-* Use a Log Aggregator like Splunk or ELK and ensure that everyone is properly trained in how to use it and that they
+* Ensure that you log all exceptions (as they shouldn't be leaked out to consumers of you system via the UI or API) 
+  as this is the easiest way to pinpoint the failing line of code.  Sometimes your APM can do this too.  
+* Use a Log Aggregator like Splunk or ELK, ensure that everyone is properly trained in how to use it and that they
   have access to all of the data they need.
 * Log all of your events in a machine parsable format (e.g. JSON) so that they can be easily indexed by your Log
   Aggregator.
@@ -79,6 +83,58 @@ consistency across different systems and that logs are available to those that n
   this but make sure the Correlation ID is on every log event.   
 
 There are many good guides on good logging practices but if you start with the principles above you will go far.
+
+### Test Your Logs
+As with everything else in software, you should test your logs.  This is often seen an a subjective activity but you
+can also objectively test and measure your logs events.
+
+In unit and integration tests, use mocking tools like [Mockito](https://site.mockito.org/) to verify that your Logger is
+called the expected number of times with the necessary arguments. 
+
+<details>
+<summary>fdsf</summary>
+<p>
+```java
+public class MetricsAnalyserTest {
+
+    @InjectMocks
+    private MetricsAnalyser metricsAnalyser;
+
+    @Mock
+    private Logger logger;
+ 
+    @Test
+    public void thatIfIssuesExistInMultipleCategoriesThenAllAreLogged() throws Exception {
+        Metrics metrics = aMetrics()
+                .withCriticalIssues(100).build();
+    
+        try {
+            metricsAnalyser.analyse(metrics);
+            fail("Exception expected");
+        } catch (Exception ex) {
+            assertThat(ex, instanceOf(MojoFailureException.class));
+        }
+        
+        // Verify errors events are recorded 
+        verify(logger).error(any(Exception.class));
+        // Verify warning events are recorded
+        verify(logger).warn(ERROR_TEMPLATE, CRITICAL, 100);
+    }
+}
+/```
+</p>
+
+</details>
+
+In integration tests, use an in-memory log appender to capture your logs and verify they contain the expected contents.
+
+In functional/component tests, testing logging is harder as you system is deployed to a real environment and mocking or 
+capturing data is harder.  This is where the tester should be stressing the system And looking at is non-functional
+outputs to verify that they can see what when wrong.  Stress examples include:
+* Providing large data sets or disallowed character sets.
+* Providing invalid security credentials.
+* Make downstream systems unavailable to your application.
+* Change system integration configuration to make API calls timeout. 
 
 ### Test Your Monitoring
 The other critical component of your application's observability stack is the Application Performance Monitoring system
