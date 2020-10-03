@@ -1,5 +1,24 @@
 # Testing For Supportability
 
+## Contents
+- [Intro](#intro)
+- [We Are All Testers](#we-are-all-testers)
+- [TL;DR](#tl-dr)
+- [Observability](#observability)
+- [Breaking Stuff](#breaking-stuff)
+- [Fixing Stuff (Quickly)](#fixing-stuff--quickly-)
+  * [Write Good Logs](#write-good-logs)
+  * [Test Your Logs](#test-your-logs)
+  * [Test Your Monitoring](#test-your-monitoring)
+  * [Test Your Metrics](#test-your-metrics)
+- [OAT - Too Little Too Late](#oat---too-little-too-late)
+- [Other Ways To Improve Supportability](#other-ways-to-improve-supportability)
+  * [Game Days](#game-days)
+  * [Chaos Engineering](#chaos-engineering)
+- [Wrap Up](#wrap-up)
+
+
+
 ## Intro
 Operations are now becoming a key part of the life of a development team.  Development team members are often tasked
 with supporting the code that they deploy into the production environment, especially when those applications are
