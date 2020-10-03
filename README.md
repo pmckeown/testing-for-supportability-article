@@ -11,7 +11,7 @@
   * [Test Your Logs](#test-your-logs)
   * [Test Your Monitoring](#test-your-monitoring)
   * [Test Your Metrics](#test-your-metrics)
-- [OAT - Too Little Too Late](#oat---too-little-too-late)
+- [## Operational Acceptance Testing Is Too Late](#operational-acceptance-testing-is-too-late)
 - [Other Ways To Improve Supportability](#other-ways-to-improve-supportability)
   * [Game Days](#game-days)
   * [Chaos Engineering](#chaos-engineering)
@@ -208,7 +208,7 @@ they are made visible somewhere, such as in a Grafana dashboard.
 
 The same verification needs apply to this open source stack as the paid-for vendor solutions for Monitoring.   
 
-## OAT - Too Little Too Late
+## Operational Acceptance Testing Is Too Late
 Many companies rely on the Operational Acceptance Testing (OAT) phase of the software delivery life cycle to perform
 this type of testing activity but in my view that is too late.  
 
