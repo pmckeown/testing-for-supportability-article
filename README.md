@@ -1,9 +1,9 @@
 # Testing For Supportability
 
 ## Intro
-Operations are now becoming a key part of the life of a development team.  Teams are often asked to support the code
-that they deploy into the production environment, especially when those applications are deemed non-critical to the
-core business of the organisation.
+Operations are now becoming a key part of the life of a development team.  Development team members are often tasked
+with supporting the code that they deploy into the production environment, especially when those applications are
+deemed non-critical to the core business of the organisation.
 
 Applications are often deployed to production without thoroughly verifying that the application _can_ be supported
 properly, by the dev team of today or the team that inherits the application in the future. 
@@ -12,28 +12,35 @@ I am going to describe what I think are the key activities for a team to perform
 code is **Supportable**.
 
 ## We Are All Testers
-Throughout this article I WILL refer to testers not as a profession, but as the person performing an activity.
-She or he may well be a Developer, a Security Consultant, a Technical Analyst or a Tester, the point is that
-all people involved in the production of code should in the business of quality assurance - we are all testers. 
+Throughout this article I will refer to testers not as a profession, but as the person performing a sotware
+verification activity.  She or he may well be a Developer, a Security Consultant, a Technical Analyst or a Tester, the
+point is that all people involved in the production of code should in the business of quality assurance - we are all
+testers. 
 
 ## TL;DR
-Let me cut to the chase - applications must be tested to prove that they can be supported. To prove that, testers
-should be trying to break their applications through Exploratory Testing.  When it breaks, if the tester cannot easily 
-tell why from observing the application, then there is work to be done to improve the non-functional characteristics of
-the system.
+Applications must be tested to prove that they can be supported. To prove that, testers should be trying to break
+their applications through Exploratory Testing.  
+
+When it breaks, if the tester cannot easily tell what broke and why from observing the application, then there is
+ work to be done to improve the non-functional characteristics of the system.
 
 ## Observability
 One of the most important aspects of an application is the ability to know what is going on inside it at runtime.
+
 In a cloud native world, observability is harder as logging into the server and inspecting the logs is often simply
 not possible. Servers are often ephemeral and so log data can be lost when the server is
-destroyed.  In cloud and traditional on-premise environments the developers who know most about the system usually
+destroyed.  
+
+In cloud and traditional on-premise environments the developers who know most about the system usually
 don't have access to the servers to be able to view logs. Logs must be shipped automatically to a log aggregation
 system such as [Splunk](https://www.splunk.com/ "Splunk") or the 
 [ELK](https://www.elastic.co/what-is/elk-stack "ELK Stack") stack for indexing, visualisation, reporting and alerting.
 
 With cloud-hosted systems, administrators can't use low-level tools like `top` and `Task Manager` for understanding the
 resource usage of the servers running the applications.  Servers may not be accessible and you may be running
-virtualised containers on virtual servers on hardware you don't own. Application Performance Monitoring (APM)
+virtualised containers on virtual servers on hardware you don't own. 
+
+Application Performance Monitoring (APM)
 systems like [Dynatrace](https://www.dynatrace.com/) and [New Relic](https://newrelic.com/) are critical for you to
 be able to visualise application behaviour, predict capacity breaches and raise problems to page on-call engineers when 
 things go wrong.  Cloud platform providers also make tools for you to visualise your workload inside their platforms,
@@ -42,34 +49,38 @@ such as [CloudWatch on AWS](https://aws.amazon.com/cloudwatch/) and
 
 There are also Open Source players in this space that allow you to build dashboards from your application metrics and
 logs.  [Grafana](https://grafana.com/ "Grafana") along with [Prometheus](https://prometheus.io/ "Prometheus") provide a
-powerful stack for you to view your applications at runtime with and newer systems like 
-[Grafana Loki](https://grafana.com/docs/loki/ "Grafana Loki") provide a more cost-effective log aggregation option
-where you pay for storage based on what you use. Tools like Istio provide visibility of your service architectures
-and traffic flows and new standards like [Open Telemetry](https://opentelemetry.io/) are making it easier to build more 
-tooling in this space than ever before. 
+powerful stack for you to view your applications at runtime. 
+
+Newer systems like [Grafana Loki](https://grafana.com/docs/loki/ "Grafana Loki") provide a more cost-effective log
+aggregation option where you pay for storage based on what you use. Tools like [Istio](https://istio.io/) provide 
+visibility of your microservice architectures and traffic flows and new standards like 
+[Open Telemetry](https://opentelemetry.io/) are making it easier to build more tooling in this space than ever before. 
 
 ## Breaking Stuff
 So how do we know that we have built an observable system?  How do we know that when things inevitably break in
-production that we will be able to determine the issue to restore service in as short a time a possible?
+production that we will be able to determine the root cause to restore service in as short a time a possible?
 
-My advice is to try to break your systems in various ways and prove that when things do go wrong the tester is able
-to easily see why. 
+The only way to know this is to try to break your systems in various ways and prove that when things do go wrong the
+tester is able to easily see why. 
 
 ## Fixing Stuff (Quickly)
 To reduce the [Mean Time To Repair](https://en.wikipedia.org/wiki/Mean_time_to_repair), whomever is paged to react to
 the incident needs to be able to find out the reason for the degradation of service or full outage - and find out fast.
 
 If you have an APM system, they can easily tell you which downstream system is broken but your logs should also do
-that too.  APMs don't generally give you details of internal application logic failures.  They might show you a
-spate of 401/403 responses but they can't generally give more details that that.  You logs are key and must clearly
-show that (for example) the bearer tokens being presented are rejected due to key signing incompatibility as the
-latest public key has not been fetched.  They can also make it obvious that some business logic is failing due to
-data assumptions that are not true in the current environment.
+that too.  
+
+APMs don't generally give you details of internal application logic failures.  They might show you a spate of 401/403
+responses but they can't generally give more details that that.  
+
+Your logs are key and must clearly show that (for example) the bearer tokens being presented are rejected due to key
+signing incompatibility.  Or highlight that some business logic is failing due to data assumptions that are not true
+in the current environment.
 
 Sometimes fixing things is a simple as "turning it off and on again" but sometimes it is much harder and visibility
 into what the system is doing is your most important tool.
 
-### Writing Good Logs
+### Write Good Logs
 Writing good logs is a MUST in modern development.  Follow these guidelines to ensure that you have consistency
 across different systems and that logs are available to those that need it:
 * Use a standard logging framework like [log4j](https://logging.apache.org/log4j) or [serilog](https://serilog.net/).
@@ -88,12 +99,27 @@ across different systems and that logs are available to those that need it:
 * Sanitise your sensitive data to ensure that personally identifiable information is not logged.  This includes
   personal details, passwords and credit card numbers etc.  
 * Use logging levels effectively and ensure that log levels can (ideally dynamically) be increased to aid
-  troubleshooting and decreased to reduce noise.   
+  troubleshooting and decreased to reduce noise.
+  
+A good example of a log event taken from [timber.io](https://github.com/timberio/log-event-json-schema) is:
+```json
+{
+  "dt": "2016-12-01T02:23:12.236543Z",           // Consistent ISO8601 dates with nanosecond precision
+  "level": "info",                               // The level of the log
+  "message": "POST /checkout for 192.321.22.21", // Human readable message
+  "context": { ... },                            // Context data shared across log line
+  "event": { ... }                               // Structured representation of this log event
+}
+```
+`Note that this JSON content should all be contained on a single line and is only pretty printed here for readability`
 
 There are many good guides on good logging practices but if you start with the principles above you will go far.
 
+If your logs don't follow these basic principles then talk to your product owner or engineering lead to start to 
+address this. 
+
 ### Test Your Logs
-As with everything else in software, you should test your logs.  This is often seen an a subjective activity but you
+As with everything else in software, you should test your logs.  This is often seen as a subjective activity but you
 can also objectively test and measure your logs events.
 
 In unit tests, use mocking tools like [Mockito](https://site.mockito.org/) to verify that your Logger is called the
@@ -132,9 +158,9 @@ public class MetricsAnalyserTest {
 In integration tests, use an in-memory log appender to capture your logs and verify they contain the expected contents.
 Here is a [good example](https://www.baeldung.com/junit-asserting-logs).
 
-In functional/component tests, testing logging is harder as you system is deployed to a real environment and mocking or 
-capturing data is harder.  This is where the tester should be stressing the system and looking at it's non-functional
-outputs to verify that they can see what went wrong.  
+In functional/component tests, verifying of logging objectively is harder as your system is deployed to a real
+environment and mocking or capturing data is harder.  This is where the tester should be stressing the system and
+looking at it's non-functional outputs to verify that they can see what went wrong.  
 
 Examples of stressing include:
 * Providing large data sets or disallowed character sets.
@@ -143,46 +169,55 @@ Examples of stressing include:
 * Change system integration configuration to make downstream API calls timeout. 
 * Push enough load into the system for it to start failing.
 
+In scenarios like these you should see failure responses that provide the minimal amount of information to the client
+about what went wrong where appropriate.  The system logs should however give you full details of the failure. 
+
 ### Test Your Monitoring
 The other critical component of your application's observability stack is the Application Performance Monitoring system
-but you can't just trust that it meets your needs.  You also need to verify that:
+but you can't just trust that it meets your needs out of the box.  You also need to verify that:
 * The metrics you need to support the application are easily visible.
-* You can build dashboards in non-prod environments to support your testing and to ensure that you know that you can 
-  in production.
-* Run load tests into your applications and view resource usage stats in your APM. 
-* Verify that errors are visualised as expected and problems are raised.
-* Test that any extra metadata used in your APM is being applied as expected. 
+* You can build dashboards in non-prod environments to support your testing and to ensure that you know what you can 
+  visualise in production.
+* You can run performance tests against your applications and view resource usage stats. 
+* You can verify that errors are visualised as expected and problems are raised.
+* Any extra metadata used in your APM is being applied as expected. 
 
 ### Test Your Metrics
 If you use open source solutions like Prometheus to extract system metrics like response times, database query times,
 memory and CPU statistics, then you must test that your application is configured correctly to ship its metrics and
-they are made visible somewhere, such as in a Grafana dashboard.  The same verification needs apply to this open
-source stack as the paid-for vendor solutions for Monitoring.   
+they are made visible somewhere, such as in a Grafana dashboard.  
+
+The same verification needs apply to this open source stack as the paid-for vendor solutions for Monitoring.   
 
 ## OAT - Too Little Too Late
 Many companies rely on the Operational Acceptance Testing (OAT) phase of the software delivery life cycle to perform
-this type of testing activity but in my view that is too late.  Testers should be looking at these operational
-aspects of their runtime systems as early in the life cycle as possible to (like everything else) reduce the cost of
-making changes or fixing defects in non-functional characteristics. 
+this type of testing activity but in my view that is too late.  
+
+Testers should be looking at these operational aspects of their runtime systems as early in the life cycle as
+possible to (like everything else) reduce the cost of making changes or fixing defects in non-functional
+characteristics. 
 
 ## Other Ways To Improve Supportability
-There are other techniques to improve the overall supportability of your system landscape:
+A couple of other techniques to improve the overall supportability of your system landscape are Game Days and Chaos
+Engineering.
 
 ### Game Days
 Game Days are the gamification of MTTR.  They can help your organisation to learn how to deal with multi-system failures
 and identify areas in your architecture where fragility and reduced supportability exists.  
 
-This can lead you to find low-hanging fruit to fix up cheaply to increase your overall resiliency and provide a
-better experience for your users.  Or perhaps even find critical flaws in your architecture before they manifest in
-your production environment.
+This can lead you to find low-hanging fruit to fix up cheaply to increase your overall resiliency or perhaps find 
+critical flaws in your architecture before they manifest in your production environment.
     
 ### Chaos Engineering
-Chaos Engineering is the automation of Game Days and running that in Production.  As such it is a riskier and more
-advanced approach to ensuring the overall resiliency of your distributed systems.  Care needs to be taken to minimise
-the blast radius of automated chaos activity. Systems in this type of environment must be designed for resiliency and
-auto-recovery from failures.  It goes without saying that if you were running this in production you will be doing to
-same in non-production and with (ideally) continuous load into your systems to mimic production load and the same
-approach to operational support that you would have in production.   
+Chaos Engineering is the automation of Game Days and running it in Production.  As such it is a riskier and more
+advanced approach to ensuring the overall resiliency of your distributed systems.  
+
+Care needs to be taken to minimise the blast radius of automated chaos activity. Systems in this type of environment
+must be designed for resiliency and auto-recovery from failures.  
+
+It goes without saying that if you were running this in production you will be doing to same in non-production, with
+continuous load into your systems to mimic production load and the same approach to operational support that you
+would have in production.   
 
 ## Wrap Up
 Designing and building distributed systems featuring high resiliency and automated recovery should be what we are all
@@ -197,7 +232,7 @@ development life cycle and look for new and interesting ways to break our softwa
 Feeding the results of that exploratory testing back into the development backlog allows us continually improve the 
 quality of our software and more importantly provide a better experience for our customers. 
 
-Non-functional characteristics of a system are just as important as the functional ones and must also be rigorously
-tested.  
+**Non-functional characteristics of a system are just as important as the functional ones and must also be rigorously
+tested.**  
 
 After all, would you want to support a system in production that was silent and unfathomable?
