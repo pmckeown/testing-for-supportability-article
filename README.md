@@ -30,7 +30,7 @@ aggregation system such as [Splunk](https://www.splunk.com/ "Splunk") or the
 
 With cloud-hosted systems, Sys Admins can't use low-level tools like `top` and `Task Manager` for understanding the
 resource usage of the servers running the applications.  Servers may not be accessible and you may be running
-virtualised containers on virtual servers on hardware you don't own.  Nowadays Application Performance Monitoring
+virtualised containers on virtual servers on hardware you don't own.  Nowadays Application Performance Monitoring (APM)
 systems like [Dynatrace](https://www.dynatrace.com/) and [New Relic](https://newrelic.com/) are critical for you to
 be able to visualise application behaviour, predict capacity breaches and page on-call engineers when things go wrong.
 
@@ -42,10 +42,75 @@ where you pay for storage based on what you use. Tools like Istio provide visibi
 and traffic flows and new standards like [Open Telemetry](https://opentelemetry.io/) are making it easier to build more 
 tooling in this space than ever before. 
 
-## Breaking stuff
-So, how do we know that we have built an observable system?  How do we know that when things brea
+## Breaking Stuff
+So, how do we know that we have built an observable system?  How do we know that when things inevitably break in
+production that we will be able to determine the issue to restore service in as short a time a possible?
+
+My advice is to try to break your systems in various ways and prove that when things do go wrong the tester is able
+to easily see why. 
+
+## Fixing Stuff (Quickly)
+To reduce the [Mean Time To Repair](https://en.wikipedia.org/wiki/Mean_time_to_repair) whoever is paged to react to the
+incident needs to be able to find out the reason for the degradation or outage of service.
+
+If you have an APM system, they can easily tell you which downstream system is broken but your logs should also do
+that too.  APMs don't generally give you details of internal application logic failures.  They might show you a
+spate of 403/401 responses but they can't generally give more details that that.  You logs are key and must clearly
+show that (for example) the bearer tokens being presented are rejected due to key signing incompatibility as the
+latest public key has not been fetched.  They can also make it obvious that some business logic is failing due to
+data assumptions that are not true in the current environment.
+
+### Test Your Logging
+Writing good logs is a MUST in modern development practices.  Follow these guidelines to ensure that you have
+consistency across different systems and that logs are available to those that need it:
+* Use a standard for your log messages in all systems. The Open Telemetry project from the CNCF is incubating an open
+  logging standard.  Until then, find another or invent your own.    
+* Ensure that you log all exceptions (as they shouldn't be leaked out to consumers of you system via the UI or API)
+* Use a Log Aggregator like Splunk or ELK and ensure that everyone is properly trained in how to use it and that they
+  have access to all of the data they need.
+* Log all of your events in a machine parsable format (e.g. JSON) so that they can be easily indexed by your Log
+  Aggregator.
+* Sanitise your sensitive data to ensure that personally identifiable information is not logged.  This includes
+  personal details, passwords and credit card numbers etc.  
+* Use logging levels effectively and ensure that log levels can be increased easily (ideally dynamically) to aid
+  troubleshooting and decreased to reduce noise.    
+* Correlation IDs are key and must be propagated between systems.  For example create a UUID when your systems first
+  get a request for work and pass it around in a header.  Open tracing standards and visibility tooling can help with
+  this but make sure the Correlation ID is on every log event.   
+
+There are many good guides on good logging practices but if you start with the principles above you will go far.
+
+### Test Your Monitoring
+The other critical component of your application's observability stack is the Application Performance Monitoring system
+but you can't just trust that it meets your needs.  You need to verify that:
+* The metrics you need to support the application are visible.
+* You can build dashboards in non-prod environments to ensure that you know that you can in production and to support
+  your testing.
+* Run load tests into your applications and view resource usage stats in your APM. 
+* Verify that errors are visualised as expected and problems are raised.
+* Test that any extra metadata used in your APM is being applied as expected. 
 
 ## OAT Phase too late
+Many companies rely on the Operational Acceptance Testing (OAT) phase of the software delivery life cycle to perform
+this type of testing activity but in my view that is too late.  Testers should be looking at these operational
+aspects of their runtime systems as early in the life cycle as possible to (like everything else) reduce the cost of
+making those changes later. 
 
-## Real-world Examples
-* Log why a request was denied, but not the details of the credential that was presented 
+## Other Ways To Improve Supportability
+There are other techniques to improve the overall supportability of you systems landscape.
+
+### Game Days
+Game Days are the gamification of MTTR.  They can help your organisation to learn how to deal with multi-system failures
+and identify areas in your architecture where fragility exists and reduced supportability exists.  This can lead you
+to find low-hanging fruit to fix up cheaply to increase your overall resiliency.  
+    
+### Chaos Engineering
+Chaos Engineering is the automation of Game Days and running that in Production.  As such it is a riskier and more
+advanced approach to ensuring the overall resiliency of your distributed systems.  Care needs to be take to minimise
+the blast radius of automated chaos activity. Systems in this type of environment must be designed for resiliency and
+auto-recovery from failures.  It goes without saying that if you were running this in production you will be doing to
+same in non-production and with (ideally) continuous load into your systems to mimic production load and the same
+approach to operational support that you would have in production. 
+
+## Wrap Up
+
