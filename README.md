@@ -151,18 +151,23 @@ public class MetricsAnalyserTest {
  
     @Test
     public void thatWarningAndErrorEventsAreLoggedAsExpectedWhenAnExceptionOccurs() throws Exception {
-        doThrow(Exception.class).when(metricsAnalyser).analyse(any(Metrics.class));
+        // Arrange
+        Metrics invalidMetrics = MetricsBuilder.anInvalidMetrics().build();
+        doThrow(InvalidMetricsException.class).when(metricsAnalyser).analyse(invalidMetrics);
 
+        // Act
         try {
-            metricsAnalyser.analyse(MetricsBuilder.anInvalidMetrics().build());
+            metricsAnalyser.analyse(invalidMetrics);
+            fail("Exception expected");
         } catch (Exception ex) {
             assertThat(ex, instanceOf(InvalidMetricsException.class));
         }
         
+        // Assert
         // Verify errors events are recorded 
-        verify(logger).error(any(InvalidMetricsException.class));
+        verify(logger).error(isA(InvalidMetricsException.class));
         // Verify warning events are recorded
-        verify(logger).warn(any(String.class));
+        verify(logger).warn("Invalid metrics data was supplied");
     }
 }
 ```
