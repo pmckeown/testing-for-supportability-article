@@ -93,8 +93,9 @@ Sometimes fixing things is as simple as "turning it off and on again".  But some
 into what the system is doing is your most important tool.
 
 ### Write Good Logs
-Writing good logs is a MUST in modern development.  Ensure that log data are available to those that need.  Follow these
-guidelines to ensure that you have consistency across different systems:
+Writing good logs is a MUST in modern development.  Ensure that log data are available to those that need.  
+
+Follow these guidelines to ensure that you have consistency across different systems:
 * Use a standard logging framework like [log4j](https://logging.apache.org/log4j) or [serilog](https://serilog.net/).
 * Use a standard for your log messages in all systems. The Open Telemetry project from the CNCF is incubating an open
   logging standard.  Until then, find another (e.g. [timber.io](https://github.com/timberio/log-event-json-schema)) or 
@@ -103,7 +104,7 @@ guidelines to ensure that you have consistency across different systems:
   get a request for work. Pass it to downstream systems as metadata and make sure it is present in every log event in
   every system. 
 * Ensure that you log all exceptions (they shouldn't be leaked out to consumers of your system via the UI or API).  
-  This is often the easiest way to pinpoint the failing line of code.  Sometimes your APM can pinpoint this too.  
+  This is often the easiest way to pinpoint the failing line of code.   
 * Use a Log Aggregator like Splunk or ELK.  Ensure that everyone is trained in how to use it and that they have access 
   to all the data they need.
 * Log all your events in a machine parsable format (e.g. JSON) so that they can be indexed by your Log Aggregator.
