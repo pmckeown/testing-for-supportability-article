@@ -11,7 +11,7 @@
   * [Test Your Logs](#test-your-logs)
   * [Test Your Monitoring](#test-your-monitoring)
   * [Test Your Metrics](#test-your-metrics)
-- [## Operational Acceptance Testing Is Too Late](#operational-acceptance-testing-is-too-late)
+- [Operational Acceptance Testing Is Too Late](#operational-acceptance-testing-is-too-late)
 - [Other Ways To Improve Supportability](#other-ways-to-improve-supportability)
   * [Game Days](#game-days)
   * [Chaos Engineering](#chaos-engineering)
