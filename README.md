@@ -156,7 +156,7 @@ public class MetricsAnalyserTest {
  
     @Test
     public void thatWarningAndErrorEventsAreLoggedAsExpectedWhenAnExceptionOccurs() throws Exception {
-        doThrow(Exception.class).when(metricsAnalyser).analsye(any(Metrics.class));
+        doThrow(Exception.class).when(metricsAnalyser).analyse(any(Metrics.class));
 
         try {
             metricsAnalyser.analyse(MetricsBuilder.anInvalidMetrics().build());
