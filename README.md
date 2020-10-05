@@ -29,7 +29,7 @@ I am going to describe what I think are the key activities for a team to perform
 code is **Supportable**.
 
 ## We Are All Testers
-Throughout this article I will refer to testers not as a profession, but as the person performing a sotware
+Throughout this article I will refer to testers not as a profession, but as the person performing a software
 verification activity.  She or he may well be a Developer, a Security Consultant, a Technical Analyst or a Tester, the
 point is that all people involved in the production of code should in the business of quality assurance - we are all
 testers. 
@@ -88,13 +88,13 @@ If you have an APM system, they can easily tell you which downstream system is b
 that too.  
 
 APMs don't generally give you details of internal application logic failures.  They might show you a spate of 401/403
-responses but they can't generally give more details that that.  
+responses but they can't generally give more detail than that.  
 
 Your logs are key and must clearly show that (for example) the bearer tokens being presented are rejected due to key
 signing incompatibility.  Or highlight that some business logic is failing due to data assumptions that are not true
 in the current environment.
 
-Sometimes fixing things is a simple as "turning it off and on again" but sometimes it is much harder and visibility
+Sometimes fixing things is as simple as "turning it off and on again" but sometimes it is much harder and visibility
 into what the system is doing is your most important tool.
 
 ### Write Good Logs
