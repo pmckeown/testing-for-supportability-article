@@ -54,12 +54,6 @@ With cloud-hosted systems, administrators can't use low-level tools like top and
 usage of servers. Servers may not be accessible and you may be running virtualised containers on virtual servers on 
 hardware you don't own.
 
-Application Performance Monitoring (APM)
-systems like [Dynatrace](https://www.dynatrace.com/) and [New Relic](https://newrelic.com/) are critical for you to
-be able to visualise application behaviour, predict capacity breaches and raise problems to page on-call engineers when 
-things go wrong.  Cloud platform providers also make tools for you to visualise your workload inside their platforms,
-such as [CloudWatch on AWS](https://aws.amazon.com/cloudwatch/) and 
-[Azure Monitor](https://docs.microsoft.com/en-us/azure/azure-monitor/).
 Application Performance Monitoring (APM) systems like [Dynatrace](https://www.dynatrace.com/) and 
 [New Relic](https://newrelic.com/) are critical today.  They allow you to visualise application behaviour, predict
 capacity breaches and raise problems to page on-call engineers. Cloud platform providers also provide tools for you to 
