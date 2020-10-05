@@ -214,7 +214,7 @@ is too late.
 
 Testers should be looking at the operational aspects of their runtime systems as early as possible.  Defects and changes
 are more expensive the closer to production you get.  So reduce the cost of changing or fixing non-functionals by 
-catching them early.
+testing them early.
 
 ## Other Ways To Improve Supportability
 Game Days and Chaos Engineering are newer techniques to improve the supportability of your systems.
@@ -227,13 +227,13 @@ This can lead you to find low-hanging fruit to fix up to increase your resilienc
 architecture before they manifest in production.
     
 ### Chaos Engineering
-Chaos Engineering is the automation of Game Days and running it in Production.  As such it is a riskier and more
+Chaos Engineering is practice of injecting failures and issues into Production.  As such it is a riskier and more
 advanced approach to ensuring the overall resiliency of your distributed systems.  
 
 Care needs to be taken to minimise the blast radius of automated chaos activity. Systems in this type of environment
 must be designed for resiliency and auto-recovery from failures.  
 
-It goes without saying that if you were running this in production you will be doing to same in non-production. You 
+It goes without saying that if you were running this in production you will be doing the same in non-production. You 
 should push continuous traffic into your systems to mimic production load. Take the same approach to operational 
 support that you would have in production - keep MTTR low.   
 
