@@ -48,11 +48,7 @@ possible. Servers are often ephemeral and so log data can be lost when the serve
 
 In both cloud and traditional on-premise environments, access to servers is restricted. Logs must be shipped to a log 
 aggregator such as [Splunk](https://www.splunk.com/ "Splunk") or the 
-[ELK](https://www.elastic.co/what-is/elk-stack "ELK Stack") stack for indexing, visualisation, reporting and alerting.
-
-With cloud-hosted systems, administrators can't use low-level tools like top and Task Manager for understanding resource
-usage of servers. Servers may not be accessible and you may be running virtualised containers on virtual servers on 
-hardware you don't own.
+[ELK Stack](https://www.elastic.co/what-is/elk-stack "ELK Stack") for indexing, visualisation, reporting and alerting.
 
 Application Performance Monitoring (APM) systems like [Dynatrace](https://www.dynatrace.com/) and 
 [New Relic](https://newrelic.com/) are critical today.  They allow you to visualise application behaviour, predict
