@@ -241,15 +241,24 @@ support that you would have in production - keep MTTR low.
 If you are building distributed systems today, you should be striving for high resiliency and automated recovery. If 
 you are testing them you should be able to prove these characteristics.
 
-It may often not be possible to run chaos testing test in production for various reasons. For example regulator 
-compliance may stop an organisation from going to this extreme.  So might plain old risk aversion.
+But systems cannot always be built to include automated recovery and all systems will inevitably break.  When
+they do it is imperative to be able to find and fix the issue as quickly as possible.  The **Mean Time To Repair** is
+your key metric to drive down to improve your customer's experience. 
 
-But as guardians of quality we should think like this during the development life cycle.  We should look for new and 
-interesting ways to break our software and to see how it behaves.  We should improve observability when we cannot see 
-into our systems.  We should explore and poke at the edges or our systems and not focus only on functionality.
+To do that you must test for supportability to prove that when things do go wrong the support engineer (developer, 
+tester, SRE or ops specialist) can find and fix it as soon as possible.
 
-We should feed the results of that exploration back into the development backlog.  This allows us improve the quality 
-and security of our software.  Also to provide a better experience for our customers.
+It may often not be possible to run chaos testing test in production for various reasons. But as the guardians of
+quality we should think like this during the development life cycle.  
+
+- We should look for new and interesting ways to break our software to see how it behaves.  
+
+- We should improve observability when we cannot see into our systems.  
+
+- We should explore and poke at the edges of our systems and not focus only on functionality.
+
+Importantly we need to feed the results of that exploration back into the development backlog.  This allows us to 
+improve the quality and security of our software and to provide a better experience for our customers.
 
 **Non-functional characteristics of a system are as important as the functional ones.  They must also be rigorously 
 tested.**
