@@ -121,6 +121,16 @@ A good example of a log event taken from [timber.io](https://github.com/timberio
 ```
 `Note that this JSON content should all be contained on a single line. It is only pretty printed here for readability.`
 
+Debug logs typically report application events that are useful when diagnosing a problem. Investigations into application failures need the "W" words:
+ 
+ Who, What, When, Where and Why:
+
+* Who was using the system when it failed?
+* Where in the code did the application fail?
+* What was the system doing when it failed?
+* When did the failure occur?
+* Why did the application fail?
+
 There are many good guides on good logging practices but if you start with the principles above you will go far.
 
 If your logs don't follow these basic principles then talk to your product owner or engineering lead to start to 
