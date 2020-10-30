@@ -21,8 +21,8 @@ Operations are now becoming a key part of the life of a development team. Develo
 supporting code that they deploy to production.  This is even more common when those applications are non-critical to 
 the organisation.
 
-Applications are often deployed to production without testing for supportability.  But that support will still need to 
-come from today's dev team or one in the future.
+Applications are often deployed to production without testing that the application can be supported.  But that support
+will eventually need to come from today's dev team or one in the future.
 
 I am going to describe what I think are the key activities for a team to perform to help them prove that their
 code is **Supportable**.
