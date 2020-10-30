@@ -2,7 +2,6 @@
 
 ## Contents
 - [Intro](#intro)
-- [We Are All Testers](#we-are-all-testers)
 - [TL;DR](#tl-dr)
 - [Observability](#observability)
 - [Breaking Stuff](#breaking-stuff)
@@ -28,17 +27,16 @@ come from today's dev team or one in the future.
 I am going to describe what I think are the key activities for a team to perform to help them prove that their
 code is **Supportable**.
 
-## We Are All Testers
-I refer to testers not as a profession but as the person performing a software verification activity.  She or he may 
-well be a Developer, a Security Consultant, a Technical Analyst or a Tester.  All people involved in the production of 
-code should in the business of quality assurance.  We are all testers. 
+Throughout I refer to testers not as a profession but as the person performing a software verification activity.  She
+or he may well be a Developer, a Security Consultant, a Technical Analyst or a Tester.  All people involved in the
+production of code should in the business of quality assurance.  We are all testers. 
 
 ## TL;DR
 Applications must be tested to prove that they can be supported. To prove that, testers should be trying to break their 
 applications.
 
-The tester should be able to tell what broke and why from observing the application.  If not, work is needed to improve 
-the non-functional characteristics of the system.
+The tester should be able to tell what broke and why from observing the application.  If not, changes are needed to
+improve the non-functional characteristics of the system.
 
 ## Observability
 One of the most important aspects of an application is the ability to know what is going on inside it at runtime.
