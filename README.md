@@ -25,7 +25,7 @@ Applications are often deployed to production without testing that the applicati
 will eventually need to come from today's dev team or one in the future.
 
 I am going to describe what I think are the key activities for a team to perform to help them prove that their
-code is **Supportable**.
+application is **Supportable**.
 
 Throughout I refer to testers not as a profession but as the person performing a software verification activity.  She
 or he may well be a Developer, a Security Consultant, a Technical Analyst or a Tester.  All people involved in the
@@ -35,7 +35,7 @@ production of code should in the business of quality assurance.  We are all test
 Applications must be tested to prove that they can be supported. To prove that, testers should be trying to break their 
 applications.
 
-The tester should be able to tell what broke and why from observing the application.  If not, changes are needed to
+The tester should be able to tell what broke and why from observing the application.  If not, changes should be made to
 improve the non-functional characteristics of the system.
 
 ## Observability
@@ -60,9 +60,11 @@ There are Open Source players in this space that allow you to build dashboards f
 powerful stack for you to view your applications at runtime. 
 
 Newer systems like [Grafana Loki](https://grafana.com/docs/loki/ "Grafana Loki") provide a more cost-effective log
-aggregation option where you pay for storage based on what you use. Tools like [Istio](https://istio.io/) provide 
-visibility of your microservice architectures and traffic flows. Also new standards like 
-[Open Telemetry](https://opentelemetry.io/) are making it easier to build more tooling in this space than ever before. 
+aggregation option where you pay for storage based on what you use. 
+
+Tools like [Istio](https://istio.io/) provide visibility of your microservice architectures and traffic flows. Also
+new standards like [Open Telemetry](https://opentelemetry.io/) are making it easier to build more tooling in this
+space than ever before. 
 
 ## Breaking Stuff
 So how do we know that we have built an observable system? How do we know that when things break in production we will 
@@ -78,7 +80,7 @@ must be able to find the root cause as fast as possible..
 If you have an APM system, they can tell you which downstream system is broken.  Your logs should also do that too.  
 
 APMs don't generally give you details of internal application logic failures.  They might show you a spate of 401/403
-responses but they can't generally give more detail than that.  
+responses but they don't usually give more detail than that.  
 
 For example your logs must show that bearer tokens are being rejected due to key signing incompatibility. Or highlight 
 that business logic is failing due to incorrect data assumptions.
@@ -87,7 +89,7 @@ Sometimes fixing things is as simple as "turning it off and on again".  But some
 into what the system is doing is your most important tool.
 
 ### Write Good Logs
-Writing good logs is a MUST in modern development.  Ensure that log data are available to those that need.  
+Writing good logs is a MUST in modern development.  Ensure that log entries are available to those that need them.  
 
 Follow these guidelines to ensure that you have consistency across different systems:
 * Use a standard logging framework like [log4j](https://logging.apache.org/log4j) or [serilog](https://serilog.net/).
@@ -119,7 +121,8 @@ A good example of a log event taken from [timber.io](https://github.com/timberio
 ```
 `Note that this JSON content should all be contained on a single line. It is only pretty printed here for readability.`
 
-There are many good guides on good logging practices but if you start with the principles above you will go far.
+There are many good guides ([like this one from Raygun](https://raygun.com/blog/c-sharp-logging-best-practices/)) on 
+good logging practices but if you start with the principles above you will go far.
 
 If your logs don't follow these basic principles then talk to your product owner or engineering lead to start to 
 address this. 
@@ -138,20 +141,20 @@ occurs:
 public class MetricsAnalyserTest {
 
     @InjectMocks
-    private MetricsAnalyser metricsAnalyser;
+    private MetricsAnalyser classUnderTest;
 
     @Mock
-    private Logger logger;
+    private Logger mockLogger;
  
     @Test
     public void thatWarningAndErrorEventsAreLoggedAsExpectedWhenAnExceptionOccurs() throws Exception {
         // Arrange
         Metrics invalidMetrics = MetricsBuilder.anInvalidMetrics().build();
-        doThrow(InvalidMetricsException.class).when(metricsAnalyser).analyse(invalidMetrics);
+        doThrow(InvalidMetricsException.class).when(classUnderTest).analyse(invalidMetrics);
 
         // Act
         try {
-            metricsAnalyser.analyse(invalidMetrics);
+            classUnderTest.analyse(invalidMetrics);
             fail("Exception expected");
         } catch (Exception ex) {
             assertThat(ex, instanceOf(InvalidMetricsException.class));
@@ -159,9 +162,9 @@ public class MetricsAnalyserTest {
         
         // Assert
         // Verify errors events are recorded 
-        verify(logger).error(isA(InvalidMetricsException.class));
+        verify(mockLogger).error(isA(InvalidMetricsException.class));
         // Verify warning events are recorded
-        verify(logger).warn("Invalid metrics data was supplied");
+        verify(mockLogger).warn("Invalid metrics data was supplied");
     }
 }
 ```
@@ -214,22 +217,25 @@ testing them early.
 Game Days and Chaos Engineering are newer techniques to improve the supportability of your systems.
 
 ### Game Days
-Game Days are the gamification of MTTR. They can help your organisation to learn how to deal with multi-system failures. 
-Also identify areas in your architecture where fragility and reduced supportability exists.  
+Game Days are the gamification of improving 
+[Mean Time To Repair (MTTR)](https://en.wikipedia.org/wiki/Mean_time_to_repair). They can help your organisation to 
+learn how to deal with multi-system failures.  Also identify areas in your architecture where fragility and reduced
+supportability exists.  
 
-This can lead you to find low-hanging fruit to fix up to increase your resiliency.  Or find critical flaws in your 
+This can lead you to find low-hanging fruit to fix up to increase your resiliency or find critical flaws in your 
 architecture before they manifest in production.
     
 ### Chaos Engineering
-Chaos Engineering is practice of injecting failures and issues into Production.  As such it is a riskier and more
-advanced approach to ensuring the overall resiliency of your distributed systems.  
+[Chaos Engineering](https://principlesofchaos.org/) is practice of injecting failures and issues into Production.  As 
+such it is a riskier and more advanced approach to ensuring the overall resiliency of your distributed systems.  
 
 Care needs to be taken to minimise the blast radius of automated chaos activity. Systems in this type of environment
 must be designed for resiliency and auto-recovery from failures.  
 
 It goes without saying that if you were running this in production you will be doing the same in non-production. You 
-should push continuous traffic into your systems to mimic production load. Take the same approach to operational 
-support that you would have in production - keep MTTR low.   
+should push continuous traffic into your systems to mimic production load. 
+
+Take the same approach to operational support as you would in production and keep MTTR as low as possible.   
 
 ## Wrap Up
 If you are building distributed systems today, you should be striving for high resiliency and automated recovery. If 
@@ -239,8 +245,8 @@ But systems cannot always be built to include automated recovery and all systems
 they do it is imperative to be able to find and fix the issue as quickly as possible.  The **Mean Time To Repair** is
 your key metric to drive down to improve your customer's experience. 
 
-To do that you must test for supportability to prove that when things do go wrong the support engineer (developer, 
-tester, SRE or ops specialist) can find and fix it as soon as possible.
+To do that you must test for supportability to prove that when things do go wrong the support engineer (Developer, 
+Tester, SRE or Ops Specialist) can find and fix it as soon as possible.
 
 It may often not be possible to run chaos testing test in production for various reasons. But as the guardians of
 quality we should think like this during the development life cycle.  
@@ -252,7 +258,7 @@ quality we should think like this during the development life cycle.
 - We should explore and poke at the edges of our systems and not focus only on functionality.
 
 Importantly we need to feed the results of that exploration back into the development backlog.  This allows us to 
-improve the quality and security of our software and to provide a better experience for our customers.
+improve the quality and security of our software and to provide a better experience for our users.
 
 **Non-functional characteristics of a system are as important as the functional ones.  They must also be rigorously 
 tested.**
